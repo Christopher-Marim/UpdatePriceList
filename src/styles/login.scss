@@ -5,9 +5,9 @@
   align-items: stretch;
   height: 100vh;
 }
+
 aside {
   flex: 7;
-
   background: rgb(12, 12, 12);
   margin: 0;
   height: 100vh;
@@ -16,7 +16,6 @@ aside {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   background: linear-gradient(rgba(10, 10, 10, 0.6), rgba(0, 0, 0, 0.9)),
     repeating-linear-gradient(
       0,
@@ -65,7 +64,7 @@ main {
 
   form {
     p {
-      font-family: "Montserrat", sans-serif;
+      font-family: "Roboto", sans-serif;
       color: black;
       font-size: 2em;
       letter-spacing: 0.2em;

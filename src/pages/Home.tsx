@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
+
 import "../styles/home.scss";
 import "../styles/effects.scss";
 
@@ -57,7 +58,7 @@ export function Home() {
 
     return media;
   }
-
+//exemplo array de resposta da api 
   const array: Product[] = [
     {
       id: 1,
@@ -84,7 +85,7 @@ export function Home() {
 
   return (
     <div id="app">
-      <main>
+      <main id="main.container">
         <div>
           <div id="wrapper">
             <h1 className="glitch" data-text="ETM">
