@@ -1,12 +1,7 @@
-import {Button} from './components/Button'
+import { Button } from "./components/Button";
+import { Home } from "./pages/Home";
 function App() {
-  return (
-    <>
-   <Button text={"opa"}></Button>
-   <Button text={"2"}></Button>
-   <Button text={"3"}></Button>
-   </>
-  );
+  return <Home></Home>;
 }
 
 export default App;

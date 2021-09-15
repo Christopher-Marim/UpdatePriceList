@@ -9,6 +9,9 @@ export function Button(props: ButtonProps){
     const [counter, setCounter] = useState(0)
 
     return(
-        <button onClick={()=>setCounter(counter + 1)}>{counter}</button>
+        <div>           
+            <h1>{props.text}</h1>
+            <button onClick={()=>setCounter(counter + 1)}>{counter}</button>
+        </div>
     )
 }
