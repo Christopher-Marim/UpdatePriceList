@@ -69,6 +69,15 @@ main {
       font-size: 2em;
       letter-spacing: 0.2em;
     }
+
+    a{
+      display: flex;
+      font-size: 0.9em;
+      margin-top: 10px;
+      width: 100%;
+      justify-content: center;
+      color:#0066cc;
+    }
     input {
       height: 50px;
       border-radius: 8px;

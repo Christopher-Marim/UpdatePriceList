@@ -3,11 +3,11 @@ import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 function App() {
   return (
-    //<Home></Home>
-    <BrowserRouter>
+    <Login></Login>
+    /* <BrowserRouter>
       <Route path="/" exact component={Login} />
       <Route path="/pages/UpdatePriceList" component={Home} />
-    </BrowserRouter>
+    </BrowserRouter> */
   );
 }
 export default App;

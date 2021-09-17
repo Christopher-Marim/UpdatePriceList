@@ -6,8 +6,8 @@ import "../styles/login.scss";
 interface InputProps extends React.ChangeEvent<HTMLInputElement> {}
 
 export function Login() {
-  const [login, setLogin] = useState<string>();
-  const [password, setPassword] = useState<string>();
+  const [login, setLogin] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const history = useHistory();
 
@@ -53,8 +53,8 @@ export function Login() {
               placeholder="Email"
             />
             <input
-              type="text"
-              security={"*"}
+              type="password" 
+              name="password"
               value={password}
               onChange={ChangeTextPassword}
               placeholder="Senha"
@@ -62,6 +62,7 @@ export function Login() {
             <button type="button" onClick={HandleClickSubmit}>
               Entrar
             </button>
+            <a  target='_blank'  href="http://www.etm.srv.br/">Preciso de ajuda</a>
           </form>
         </div>
       </main>
