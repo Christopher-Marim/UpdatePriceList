@@ -1,6 +1,41 @@
+import { useState } from "react";
+import {useHistory} from 'react-router-dom'
+import api from "../services/api";
 import "../styles/login.scss";
 
+interface InputProps extends React.ChangeEvent<HTMLInputElement> {}
+
 export function Login() {
+  const [login, setLogin] = useState<string>();
+  const [password, setPassword] = useState<string>();
+
+  const history = useHistory();
+
+  function ChangeTextLogin(event: InputProps) {
+    const text = event.target.value;
+    setLogin(text);
+  }
+  function ChangeTextPassword(event: InputProps) {
+    const text = event.target.value;
+    setPassword(text);
+  }
+
+  async function HandleClickSubmit() {
+    console.warn(login, password);
+    await api
+      .get(
+        `/Acessoappcoleta?method=loadAll&usuarioApp=${login}&senhaApp=${password}`
+      )
+      .then((response) => {
+        console.warn(response.data, response.status);
+
+        if(response.status==200){
+          history.push('/pages/UpdatePriceList')
+        }
+      }).catch(()=>{console.error("Erro")})
+      ;
+  }
+
   return (
     <div id="page-login">
       <aside>
@@ -10,10 +45,23 @@ export function Login() {
       <main>
         <div className="main-container">
           <form>
-            <p>LOGIN</p> 
-            <input type="text" className="Input-text" id="input" placeholder="Email" />
-            <input type="text" placeholder="Senha" />
-            <button type="submit">Entrar</button>
+            <p>LOGIN</p>
+            <input
+              type="text"
+              value={login}
+              onChange={ChangeTextLogin}
+              placeholder="Email"
+            />
+            <input
+              type="text"
+              security={"*"}
+              value={password}
+              onChange={ChangeTextPassword}
+              placeholder="Senha"
+            />
+            <button type="button" onClick={HandleClickSubmit}>
+              Entrar
+            </button>
           </form>
         </div>
       </main>
