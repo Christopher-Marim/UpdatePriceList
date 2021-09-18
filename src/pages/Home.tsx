@@ -85,7 +85,7 @@ export function Home() {
 
   return (
     <div id="app">
-      <main id="main.container">
+      <main id="mainHome">
         <div>
           <div id="wrapper">
             <h1 className="glitch" data-text="ETM">

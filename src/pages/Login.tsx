@@ -27,11 +27,13 @@ export function Login() {
         `/Acessoappcoleta?method=loadAll&usuarioApp=${login}&senhaApp=${password}`
       )
       .then((response) => {
-        console.warn(response.data, response.status);
-
-        if(response.status==200){
-          history.push('/pages/UpdatePriceList')
+        if(response.data.data[0]) {
+          history.push('/pages/UpdatePriceList');
         }
+        else{
+          alert("Erro ao conectar, verificar email e senha")
+        }
+   
       }).catch(()=>{console.error("Erro")})
       ;
   }
@@ -42,7 +44,7 @@ export function Login() {
         <h1>ETM</h1>
         <span className="sub">Consultoria e Sistemas</span>
       </aside>
-      <main>
+      <main id='mainLogin'>
         <div className="main-container">
           <form>
             <p>LOGIN</p>
