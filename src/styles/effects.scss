@@ -9,11 +9,11 @@ h1 {
 }
 
 #app {
-  background: rgb(10, 10, 10);
-  height: 100vh;
-  width: 100%;
+  flex: 7;
+  background: rgb(12, 12, 12);
   margin: 0;
-  padding: 0;
+  height: 100vh;
+  padding: 120px 80px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -30,6 +30,7 @@ h1 {
   background-size: cover;
   background-position: center;
   z-index: 1;
+
 }
 
 #wrapper {

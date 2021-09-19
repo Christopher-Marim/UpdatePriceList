@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_AXIOS_API_BASEURL,
-  headers:{Authorization: "Basic 1332a3be38efc622d2b7529d9f44a1fbae8236cc9f1f0f865af71c08155a"}
+  headers:{Authorization: process.env.REACT_APP_AXIOS_API_AUTHORIZATION}
 });
 
 export default api;

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
-import { CustomizedTables } from "../components/Table";
 import api from "../services/api";
 
 import "../styles/home.scss";
 import "../styles/effects.scss";
+import { Grafico } from "../components/Grafico";
+import { Alert } from "@material-ui/core";
 
 interface InputProps extends React.ChangeEvent<HTMLInputElement> {}
 interface SelectProps extends React.ChangeEvent<HTMLSelectElement> {}
@@ -17,7 +18,7 @@ export interface Product {
   nomeTabela: string;
 }
 
-interface Response {
+export interface Response {
   R_E_C_N_O_: string;
   DA1_CODTAB: string;
   DA1_CODPRO: string;
@@ -32,7 +33,6 @@ interface Response {
 export function Home() {
   const [codProduto, setcodProduto] = useState<string>("");
   const [listProdutos, setListProdutos] = useState<Product[]>([]);
-  const [recno, setRecno] = useState<string>("");
   const [nameProduct, setNameProduct] = useState<string>("");
   const [priceProduct, setPriceProduct] = useState<string>("");
   const [priceProductAverage, setPriceProductAverage] = useState<string>("");
@@ -98,74 +98,108 @@ export function Home() {
         console.error("Erro", e);
       });
   }
+
+  function getIdProdutoPriceList() {
+    const produto = listProdutos.find((item) => {
+      if (item.tabela == filialSelected) {
+        return item;
+      }
+    });
+
+    return produto?.id;
+  }
+
+  async function UpdatePrice() {
+    const codRegistro = getIdProdutoPriceList();
+    await api
+      .get(
+        `/pricelist?method=setPreco&codRegistro=${codRegistro}&novoValor=${priceProduct}`
+      )
+      .then((response) => {
+        console.log(response);
+        if (response.data.data) {
+          alert("Sucesso")
+          getProduct(codProduto)
+        } else {
+          alert("Erro ao conectar!");
+        }
+      })
+      .catch((e) => {
+        console.error("Erro", e);
+      });
+  }
   //exemplo listProdutos de resposta da api
 
   return (
-    <div id="app">
-      <main id="mainHome">
-        <div>
-          <div id="wrapper">
-            <h1 className="glitch" data-text="ETM">
-              ETM
-            </h1>
-            <span className="sub">Consultoria e Sistemas</span>
+    <div id="container">
+      <div id="app">
+        <main id="mainHome">
+          <div>
+            <div id="wrapper">
+              <h1 className="glitch" data-text="ETM">
+                ETM
+              </h1>
+              <span className="sub">Consultoria e Sistemas</span>
+            </div>
+            <form>
+              <p>Código do produto</p>
+              <input
+                type="text"
+                value={codProduto}
+                onChange={ChangeTextProduct}
+                maxLength={6}
+                placeholder="Digite o código"
+              />
+              <div id={"wrapperTable"}>
+                <p id="sugestionPrice">{nameProduct}</p>
+                {nameProduct.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setVisibleTable(!visibleTable)}
+                    id="mostrarTabela"
+                  >
+                    {!visibleTable && "Mostrar tabela de dados"}
+                    {visibleTable && "Ocultar tabela de dados"}
+                  </button>
+                )}
+              </div>
+              <p>Preço</p>
+              <CurrencyInput
+                prefix={"R$"}
+                id="input-example"
+                name="input-name"
+                value={priceProduct}
+                placeholder="Digite o preço"
+                intlConfig={{ locale: "pt-br" }}
+                decimalsLimit={2}
+                onValueChange={(value) => {
+                  setPriceProduct(value ? value : "");
+                }}
+              />
+              <p id="sugestionPrice">{priceProductAverage}</p>
+              <p>Filial</p>
+              <select id="filiais" onChange={ChangeSelectedFilial}>
+                <option value="001">Smartcase RBA - 01</option>
+                <option value="003">Smartcase RCR - 02</option>
+                <option value="002">Smartcase CBF - 03</option>
+                <option value="006">Smartcase BLV - 04</option>
+                <option value="013">Smartcase QSQPLZ - 05</option>
+                <option value="011">Smartcase AMS - 07</option>
+                <option value="005">Smartcase SJD - 08</option>
+                <option value="006">Smartcase QSQBLV - 09</option>
+                <option value="007">Smartcase PLZ - 11</option>
+                <option value="014">Smartcase BVV - 12</option>
+              </select>
+              <button type="button" onClick={UpdatePrice}>Enviar</button>
+            </form>
           </div>
-          <form>
-            <p>Código do produto</p>
-            <input
-              type="text"
-              value={codProduto}
-              onChange={ChangeTextProduct}
-              maxLength={6}
-              placeholder="Digite o código"
-            />
-            <div id={"wrapperTable"}>
-              <p id="sugestionPrice">{nameProduct}</p>
-              {nameProduct.length > 0 && (
-                <button
-                  type="button"
-                  onClick={() => setVisibleTable(true)}
-                  id="mostrarTabela"
-                >
-                  Mostrar tabela de dados
-                </button>
-              )}
-            </div>
-            <p>Preço</p>
-            <CurrencyInput
-              prefix={"R$"}
-              id="input-example"
-              name="input-name"
-              value={priceProduct}
-              placeholder="Digite o preço"
-              intlConfig={{ locale: "pt-br" }}
-              decimalsLimit={2}
-              onValueChange={(value) => setPriceProduct(value ? value : "")}
-            />
-            <p id="sugestionPrice">{priceProductAverage}</p>
-            <p>Filial</p>
-            <select id="filiais" onChange={ChangeSelectedFilial}>
-              <option value="001">Smartcase RBA - 01</option>
-              <option value="003">Smartcase RCR - 02</option>
-              <option value="002">Smartcase CBF - 03</option>
-              <option value="006">Smartcase BLV - 04</option>
-              <option value="013">Smartcase QSQPLZ - 05</option>
-              <option value="011">Smartcase AMS - 07</option>
-              <option value="005">Smartcase SJD - 08</option>
-              <option value="006">Smartcase QSQBLV - 09</option>
-              <option value="007">Smartcase PLZ - 11</option>
-              <option value="014">Smartcase BVV - 12</option>
-            </select>
-            <button>Enviar</button>
-          </form>
-
-          {visibleTable && (
-            <div id="containerTable">
-              <CustomizedTables tabela={listProdutos}></CustomizedTables>
-            </div>
-          )}
+        </main>
+      </div>
+      {visibleTable && (
+        <div id="containerTable">
+          <Grafico array={listProdutos}></Grafico>
         </div>
-      </main>
+      )}
     </div>
   );
 }
