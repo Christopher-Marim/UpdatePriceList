@@ -3,6 +3,8 @@ import CurrencyInput from "react-currency-input-field";
 
 import "../styles/home.scss";
 import "../styles/effects.scss";
+import api from "../services/api";
+import { CustomizedTables } from "../components/Table";
 
 interface InputProps extends React.ChangeEvent<HTMLInputElement> {}
 interface SelectProps extends React.ChangeEvent<HTMLSelectElement> {}
@@ -20,13 +22,14 @@ export function Home() {
   const [priceProduct, setPriceProduct] = useState<string>("");
   const [priceProductAverage, setPriceProductAverage] = useState<string>("");
   const [filialSelected, setFilialSelected] = useState<string>("001");
+  const [visibleTable, setVisibleTable] = useState(false);
 
-  function ChangeTextProduct(event: InputProps) {
+  async function ChangeTextProduct(event: InputProps) {
     const text = event.target.value;
     setcodProduto(text);
 
     if (text.length === 6) {
-      const media = getProduct(text);
+      const media = await getProduct(text);
       setPriceProductAverage(`Preço médio: ${media.toFixed(2)}`);
     } else {
       setPriceProductAverage("");
@@ -41,7 +44,18 @@ export function Home() {
   }
 
   //logica para pegar do array de produtos os produtos com o codigo digitado e retornar o preco médio deles
-  function getProduct(codProduct: string) {
+  async function getProduct(codProduct: string) {
+    await api
+      .get(`/pricelist?limit=10`)
+      .then((response) => {
+        if (response.data.data[0]) {
+        } else {
+          alert("Erro ao conectar!");
+        }
+      })
+      .catch((e) => {
+        console.error("Erro", e);
+      });
     const products = array.filter((item: Product) => {
       if (item.codigo === codProduct) {
         return item;
@@ -58,7 +72,7 @@ export function Home() {
 
     return media;
   }
-//exemplo array de resposta da api 
+  //exemplo array de resposta da api
   const array: Product[] = [
     {
       id: 1,
@@ -76,6 +90,153 @@ export function Home() {
     },
     {
       id: 3,
+      codigo: "160002",
+      nome: "Bola",
+      preco: 40.0,
+      filial: "11",
+    },
+    {
+      id: 4,
+      codigo: "160001",
+      nome: "Bola",
+      preco: 25.0,
+      filial: "02",
+    },
+    {
+      id: 5,
+      codigo: "160001",
+      nome: "Bola",
+      preco: 30.0,
+      filial: "03",
+    },
+    {
+      id: 6,
+      codigo: "160002",
+      nome: "Bola",
+      preco: 40.0,
+      filial: "11",
+    },
+    {
+      id: 7,
+      codigo: "160001",
+      nome: "Bola",
+      preco: 25.0,
+      filial: "02",
+    },
+    {
+      id: 8,
+      codigo: "160001",
+      nome: "Bola",
+      preco: 30.0,
+      filial: "03",
+    },
+    {
+      id: 9,
+      codigo: "160002",
+      nome: "Bola",
+      preco: 40.0,
+      filial: "11",
+    },
+    {
+      id: 10,
+      codigo: "160001",
+      nome: "Bola",
+      preco: 25.0,
+      filial: "02",
+    },
+    {
+      id: 11,
+      codigo: "160001",
+      nome: "Bola",
+      preco: 30.0,
+      filial: "03",
+    },
+    {
+      id: 12,
+      codigo: "160002",
+      nome: "Bola",
+      preco: 40.0,
+      filial: "11",
+    },
+    {
+      id: 1,
+      codigo: "160001",
+      nome: "Bola",
+      preco: 25.0,
+      filial: "02",
+    },
+    {
+      id: 2,
+      codigo: "160001",
+      nome: "Bola",
+      preco: 30.0,
+      filial: "03",
+    },
+    {
+      id: 3,
+      codigo: "160002",
+      nome: "Bola",
+      preco: 40.0,
+      filial: "11",
+    },
+    {
+      id: 4,
+      codigo: "160001",
+      nome: "Bola",
+      preco: 25.0,
+      filial: "02",
+    },
+    {
+      id: 5,
+      codigo: "160001",
+      nome: "Bola",
+      preco: 30.0,
+      filial: "03",
+    },
+    {
+      id: 6,
+      codigo: "160002",
+      nome: "Bola",
+      preco: 40.0,
+      filial: "11",
+    },
+    {
+      id: 7,
+      codigo: "160001",
+      nome: "Bola",
+      preco: 25.0,
+      filial: "02",
+    },
+    {
+      id: 8,
+      codigo: "160001",
+      nome: "Bola",
+      preco: 30.0,
+      filial: "03",
+    },
+    {
+      id: 9,
+      codigo: "160002",
+      nome: "Bola",
+      preco: 40.0,
+      filial: "11",
+    },
+    {
+      id: 10,
+      codigo: "160001",
+      nome: "Bola",
+      preco: 25.0,
+      filial: "02",
+    },
+    {
+      id: 11,
+      codigo: "160001",
+      nome: "Bola",
+      preco: 30.0,
+      filial: "03",
+    },
+    {
+      id: 12,
       codigo: "160002",
       nome: "Bola",
       preco: 40.0,
@@ -102,7 +263,10 @@ export function Home() {
               maxLength={6}
               placeholder="Digite o código"
             />
-            <p id="sugestionPrice">{nameProduct}</p>
+            <div id={"wrapperTable"}>
+              <p id="sugestionPrice">{nameProduct}</p>
+              {nameProduct.length > 0 && <button type="button" onClick={() =>setVisibleTable(true)}id="mostrarTabela">Mostrar tabela de dados</button>}
+            </div>
             <p>Preço</p>
             <CurrencyInput
               prefix={"R$"}
@@ -112,7 +276,7 @@ export function Home() {
               placeholder="Digite o preço"
               intlConfig={{ locale: "pt-br" }}
               decimalsLimit={2}
-              onValueChange={(value) => setPriceProduct(value?value:'')}
+              onValueChange={(value) => setPriceProduct(value ? value : "")}
             />
             <p id="sugestionPrice">{priceProductAverage}</p>
             <p>Filial</p>
@@ -130,6 +294,8 @@ export function Home() {
             </select>
             <button>Enviar</button>
           </form>
+          {visibleTable&&<CustomizedTables tabela={array}></CustomizedTables>}
+          
         </div>
       </main>
     </div>
