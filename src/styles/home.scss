@@ -29,9 +29,9 @@
         font-size: 0.75rem;
         border-radius: 0px;
         border-width: 0px;     
-        justify-content:flex-end;
+        align-items:flex-start;
         margin: 0px;
-        padding: 5px;
+        padding: 5px 0px;
         &:hover {
           text-decoration:underline
         }

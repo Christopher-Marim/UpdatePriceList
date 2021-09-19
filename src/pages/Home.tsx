@@ -1,23 +1,38 @@
 import { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
+import { CustomizedTables } from "../components/Table";
+import api from "../services/api";
 
 import "../styles/home.scss";
 import "../styles/effects.scss";
-import api from "../services/api";
-import { CustomizedTables } from "../components/Table";
 
 interface InputProps extends React.ChangeEvent<HTMLInputElement> {}
 interface SelectProps extends React.ChangeEvent<HTMLSelectElement> {}
-interface Product {
-  id: number;
+export interface Product {
+  id: string;
   codigo: string;
   nome: string;
   preco: number;
-  filial: string;
+  tabela: string;
+  nomeTabela: string;
+}
+
+interface Response {
+  R_E_C_N_O_: string;
+  DA1_CODTAB: string;
+  DA1_CODPRO: string;
+  DA1_PRCVEN: string;
+  DA1_ATIVO: string;
+  D_E_L_E_T_: string;
+  R_E_C_D_E_L_: string;
+  nomeProduto: string;
+  nomeTabela: string;
 }
 
 export function Home() {
   const [codProduto, setcodProduto] = useState<string>("");
+  const [listProdutos, setListProdutos] = useState<Product[]>([]);
+  const [recno, setRecno] = useState<string>("");
   const [nameProduct, setNameProduct] = useState<string>("");
   const [priceProduct, setPriceProduct] = useState<string>("");
   const [priceProductAverage, setPriceProductAverage] = useState<string>("");
@@ -29,8 +44,7 @@ export function Home() {
     setcodProduto(text);
 
     if (text.length === 6) {
-      const media = await getProduct(text);
-      setPriceProductAverage(`Preço médio: ${media.toFixed(2)}`);
+      getProduct(text);
     } else {
       setPriceProductAverage("");
       setNameProduct("");
@@ -43,12 +57,39 @@ export function Home() {
     console.warn(text);
   }
 
-  //logica para pegar do array de produtos os produtos com o codigo digitado e retornar o preco médio deles
+  function ModelListProdutos(responseData: Response[]) {
+    const response: Product[] = responseData.map((item) => {
+      const object = {
+        id: item.R_E_C_N_O_.trim(),
+        codigo: item.DA1_CODPRO.trim(),
+        nome: item.nomeProduto.trim(),
+        preco: parseFloat(item.DA1_PRCVEN.trim()),
+        tabela: item.DA1_CODTAB.trim(),
+        nomeTabela: item.nomeTabela.trim(),
+      };
+      return object;
+    });
+
+    setListProdutos(response);
+
+    setNameProduct("Nome do Produto: " + response[0].nome);
+    let inicialValue = 0;
+
+    response.map(({ preco }) => {
+      inicialValue = inicialValue + preco;
+    });
+    const media = inicialValue / response.length;
+    setPriceProductAverage(`Preço médio: ${media.toFixed(2)}`);
+  }
+
+  //logica para pegar do listProdutos de produtos os produtos com o codigo digitado e retornar o preco médio deles
   async function getProduct(codProduct: string) {
     await api
-      .get(`/pricelist?limit=10`)
+      .get(`/pricelist?method=getProduto&codProduto=${codProduct}`)
       .then((response) => {
-        if (response.data.data[0]) {
+        console.log(response);
+        if (response.data.data) {
+          ModelListProdutos(response.data.data);
         } else {
           alert("Erro ao conectar!");
         }
@@ -56,193 +97,8 @@ export function Home() {
       .catch((e) => {
         console.error("Erro", e);
       });
-    const products = array.filter((item: Product) => {
-      if (item.codigo === codProduct) {
-        return item;
-      }
-    });
-    setNameProduct("Nome do Produto: " + products[0].nome);
-
-    let inicialValue = 0;
-
-    products.map(({ preco }) => {
-      inicialValue = inicialValue + preco;
-    });
-    const media = inicialValue / products.length;
-
-    return media;
   }
-  //exemplo array de resposta da api
-  const array: Product[] = [
-    {
-      id: 1,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 25.0,
-      filial: "02",
-    },
-    {
-      id: 2,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 30.0,
-      filial: "03",
-    },
-    {
-      id: 3,
-      codigo: "160002",
-      nome: "Bola",
-      preco: 40.0,
-      filial: "11",
-    },
-    {
-      id: 4,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 25.0,
-      filial: "02",
-    },
-    {
-      id: 5,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 30.0,
-      filial: "03",
-    },
-    {
-      id: 6,
-      codigo: "160002",
-      nome: "Bola",
-      preco: 40.0,
-      filial: "11",
-    },
-    {
-      id: 7,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 25.0,
-      filial: "02",
-    },
-    {
-      id: 8,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 30.0,
-      filial: "03",
-    },
-    {
-      id: 9,
-      codigo: "160002",
-      nome: "Bola",
-      preco: 40.0,
-      filial: "11",
-    },
-    {
-      id: 10,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 25.0,
-      filial: "02",
-    },
-    {
-      id: 11,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 30.0,
-      filial: "03",
-    },
-    {
-      id: 12,
-      codigo: "160002",
-      nome: "Bola",
-      preco: 40.0,
-      filial: "11",
-    },
-    {
-      id: 1,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 25.0,
-      filial: "02",
-    },
-    {
-      id: 2,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 30.0,
-      filial: "03",
-    },
-    {
-      id: 3,
-      codigo: "160002",
-      nome: "Bola",
-      preco: 40.0,
-      filial: "11",
-    },
-    {
-      id: 4,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 25.0,
-      filial: "02",
-    },
-    {
-      id: 5,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 30.0,
-      filial: "03",
-    },
-    {
-      id: 6,
-      codigo: "160002",
-      nome: "Bola",
-      preco: 40.0,
-      filial: "11",
-    },
-    {
-      id: 7,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 25.0,
-      filial: "02",
-    },
-    {
-      id: 8,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 30.0,
-      filial: "03",
-    },
-    {
-      id: 9,
-      codigo: "160002",
-      nome: "Bola",
-      preco: 40.0,
-      filial: "11",
-    },
-    {
-      id: 10,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 25.0,
-      filial: "02",
-    },
-    {
-      id: 11,
-      codigo: "160001",
-      nome: "Bola",
-      preco: 30.0,
-      filial: "03",
-    },
-    {
-      id: 12,
-      codigo: "160002",
-      nome: "Bola",
-      preco: 40.0,
-      filial: "11",
-    },
-  ];
+  //exemplo listProdutos de resposta da api
 
   return (
     <div id="app">
@@ -265,7 +121,15 @@ export function Home() {
             />
             <div id={"wrapperTable"}>
               <p id="sugestionPrice">{nameProduct}</p>
-              {nameProduct.length > 0 && <button type="button" onClick={() =>setVisibleTable(true)}id="mostrarTabela">Mostrar tabela de dados</button>}
+              {nameProduct.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setVisibleTable(true)}
+                  id="mostrarTabela"
+                >
+                  Mostrar tabela de dados
+                </button>
+              )}
             </div>
             <p>Preço</p>
             <CurrencyInput
@@ -294,8 +158,12 @@ export function Home() {
             </select>
             <button>Enviar</button>
           </form>
-          {visibleTable&&<CustomizedTables tabela={array}></CustomizedTables>}
-          
+
+          {visibleTable && (
+            <div id="containerTable">
+              <CustomizedTables tabela={listProdutos}></CustomizedTables>
+            </div>
+          )}
         </div>
       </main>
     </div>

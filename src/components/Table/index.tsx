@@ -1,12 +1,7 @@
+import { Product } from '../../pages/Home';
 import '../../styles/table.scss';
 
-interface Product {
-  id: number;
-  codigo: string;
-  nome: string;
-  preco: number;
-  filial: string;
-}
+
 
 interface props{
   tabela: Product[]
@@ -21,7 +16,7 @@ export function CustomizedTables({tabela}:props) {
 				<th>Código</th>
 				<th>Nome</th>
 				<th>Preço</th>
-				<th>Filial</th>
+				<th>Tabela</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -30,7 +25,7 @@ export function CustomizedTables({tabela}:props) {
 				<td>{item.codigo}</td>
         <td>{item.nome}</td>
         <td>{item.preco}</td>
-        <td>{item.filial}</td>
+        <td>{item.nomeTabela}</td>
 			</tr>
       ))}
 		</tbody>
