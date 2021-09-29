@@ -1,10 +1,10 @@
 import { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
-import api from "../services/api";
+import api from "../../services/api";
 
-import "../styles/home.scss";
-import "../styles/effects.scss";
-import { Grafico } from "../components/Grafico";
+import "../../styles/home.scss";
+import "../../styles/effects.scss";
+import { Grafico } from "../../components/Grafico";
 import { Alert } from "@material-ui/core";
 
 interface InputProps extends React.ChangeEvent<HTMLInputElement> {}
@@ -118,8 +118,9 @@ export function Home() {
       .then((response) => {
         console.log(response);
         if (response.data.data) {
-          alert("Sucesso")
-          getProduct(codProduto)
+          getProduct(codProduto);
+          setPriceProduct("");
+          alert("Sucesso");
         } else {
           alert("Erro ao conectar!");
         }
@@ -190,7 +191,9 @@ export function Home() {
                 <option value="007">Smartcase PLZ - 11</option>
                 <option value="014">Smartcase BVV - 12</option>
               </select>
-              <button type="button" onClick={UpdatePrice}>Enviar</button>
+              <button type="button" onClick={UpdatePrice}>
+                Enviar
+              </button>
             </form>
           </div>
         </main>
