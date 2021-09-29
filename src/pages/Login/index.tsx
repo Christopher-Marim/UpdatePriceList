@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 //import { Loader } from "../components/Loader";
-//import { useAuth } from "../hooks/auth";
-//import api from "../services/api";
+import { useAuth } from "../../hooks/auth";
+import api from "../../services/api";
 import {
   Button,
   Container,
@@ -26,7 +26,7 @@ export function Login() {
   const [passwordText, setPasswordText] = useState<string>("");
 
   const history = useHistory();
-  //const { signIn, user, loading } = useAuth();
+  const { signIn, user, loading } = useAuth();
 
   function ChangeTextLogin(event: InputProps) {
     const text = event.target.value;
@@ -38,22 +38,20 @@ export function Login() {
   }
 
   useEffect(() => {
-  // if (user) {
-  //    history.push("/pages/home");
- //   }
-  });
+   if (user) {
+      history.push("/pages/UpdatePriceList");
+   }
+  },[]);
 
   async function HandleClickLogin() {
     const login = {
       login: loginText,
       senha: passwordText,
     };
-    //await signIn(login); 
-  
+    await signIn(login); 
   }
 
   return (
- 
       <Container>
         <Image>
           <h1>ETM</h1>

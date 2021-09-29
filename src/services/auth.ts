@@ -6,7 +6,6 @@ interface Response {
     nome: string,
     login: string,
     senha: string,
-    admin:boolean
   };
 }
 interface RequestSignIn {
@@ -17,7 +16,7 @@ interface RequestSignIn {
 export async function signIn({ login, senha }: RequestSignIn): Promise<Response> {
   console.log(login, senha)
 
-  const { data, status } = await api.get(`/acesso?method=loginApp&pLogin=${login}&pSenha=${senha}`)
+  const { data, status } = await api.get(`/Acessoappcoleta?method=loadAll&usuarioApp=${login}&senhaApp=${senha}`)
   const user = data.data[0]
   if(!user){
     console.error('Status Response:' + status)
@@ -31,7 +30,6 @@ export async function signIn({ login, senha }: RequestSignIn): Promise<Response>
         nome: `${user?.nome}`,
         login: `${login}`,
         senha: `${senha}`,
-        admin: user?.admin == "1"?true:false
       }
 
     });
