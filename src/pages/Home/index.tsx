@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import api from "../../services/api";
 
-import "../../styles/home.scss";
 import "../../styles/effects.scss";
 import { Grafico } from "../../components/Grafico";
-import { Alert } from "@material-ui/core";
+import { Container, ContainerGrafico, MainHome } from "./styles";
 
 interface InputProps extends React.ChangeEvent<HTMLInputElement> {}
 interface SelectProps extends React.ChangeEvent<HTMLSelectElement> {}
@@ -37,7 +36,16 @@ export function Home() {
   const [priceProduct, setPriceProduct] = useState<string>("");
   const [priceProductAverage, setPriceProductAverage] = useState<string>("");
   const [filialSelected, setFilialSelected] = useState<string>("001");
-  const [visibleTable, setVisibleTable] = useState(false);
+  const [visibleContainerGrafic, setVisibleContainerGrafic] = useState(false);
+  const [visibleGrafic, setVisibleGrafic] = useState(false);
+
+  useEffect(() => {
+    if (visibleContainerGrafic) {
+      setTimeout(()=>{setVisibleGrafic(true)},550) 
+    } else {
+      setVisibleGrafic(false);
+    }
+  }, [visibleContainerGrafic]);
 
   async function ChangeTextProduct(event: InputProps) {
     const text = event.target.value;
@@ -54,11 +62,10 @@ export function Home() {
   function ChangeSelectedFilial(event: SelectProps) {
     const text = event.target.value;
     setFilialSelected(text);
-    console.warn(text);
   }
 
-  function ModelListProdutos(responseData: Response[]) {
-    const response: Product[] = responseData.map((item) => {
+  function ModelListProdutos(responseData: Response[] = []) {
+    const response: Product[] = responseData?.map((item) => {
       const object = {
         id: item.R_E_C_N_O_.trim(),
         codigo: item.DA1_CODPRO.trim(),
@@ -87,8 +94,8 @@ export function Home() {
     await api
       .get(`/pricelist?method=getProduto&codProduto=${codProduct}`)
       .then((response) => {
-        console.log(response);
         if (response.data.data) {
+          console.log(response.data.data);
           ModelListProdutos(response.data.data);
         } else {
           alert("Erro ao conectar!");
@@ -116,7 +123,6 @@ export function Home() {
         `/pricelist?method=setPreco&codRegistro=${codRegistro}&novoValor=${priceProduct}`
       )
       .then((response) => {
-        console.log(response);
         if (response.data.data) {
           getProduct(codProduto);
           setPriceProduct("");
@@ -132,9 +138,9 @@ export function Home() {
   //exemplo listProdutos de resposta da api
 
   return (
-    <div id="container">
+    <Container>
       <div id="app">
-        <main id="mainHome">
+        <MainHome>
           <div>
             <div id="wrapper">
               <h1 className="glitch" data-text="ETM">
@@ -151,16 +157,15 @@ export function Home() {
                 maxLength={6}
                 placeholder="Digite o código"
               />
-              <div id={"wrapperTable"}>
+              <div id="wrapperTable">
                 <p id="sugestionPrice">{nameProduct}</p>
                 {nameProduct.length > 0 && (
                   <button
                     type="button"
-                    onClick={() => setVisibleTable(!visibleTable)}
-                    id="mostrarTabela"
+                    onClick={() => setVisibleContainerGrafic(!visibleContainerGrafic)}
                   >
-                    {!visibleTable && "Mostrar tabela de dados"}
-                    {visibleTable && "Ocultar tabela de dados"}
+                    {!visibleContainerGrafic && "Mostrar tabela de dados"}
+                    {visibleContainerGrafic && "Ocultar tabela de dados"}
                   </button>
                 )}
               </div>
@@ -196,13 +201,11 @@ export function Home() {
               </button>
             </form>
           </div>
-        </main>
+        </MainHome>
       </div>
-      {visibleTable && (
-        <div id="containerTable">
-          <Grafico array={listProdutos}></Grafico>
-        </div>
-      )}
-    </div>
+      <ContainerGrafico style={{ flex: visibleContainerGrafic ?12 : 0, padding:visibleContainerGrafic?20:0 }}>
+        {visibleGrafic&&<Grafico array={listProdutos}></Grafico>}
+      </ContainerGrafico>
+    </Container>
   );
 }

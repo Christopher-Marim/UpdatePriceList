@@ -1,8 +1,6 @@
-import { parse } from "path";
+
 import { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
-import { GoogleDataTableColumnRoleType } from "react-google-charts/dist/types";
-import { ModuleKind } from "typescript";
 import { Product } from "../../pages/Home";
 
 interface Props {
@@ -11,6 +9,7 @@ interface Props {
 
 export function Grafico({ array }: Props) {
   const [dadosGrafico, setDadosGrafico] = useState<any>([]);
+  
   useEffect(() => {
     const arrayResponse = array.map((item) => {
       const object = [item.nomeTabela, item.preco];
@@ -23,7 +22,7 @@ export function Grafico({ array }: Props) {
 
   return (
     <Chart
-      chartType="BarChart"
+      chartType="Bar"
       rows={dadosGrafico}
       columns={[
         {
@@ -39,18 +38,21 @@ export function Grafico({ array }: Props) {
         // Chart options
         {
           legend: {
-            position: "right",
+            position: "right",   
           },
+          
           title: "Preço por filial",
+          bars: 'horizontal',
           hAxis: {
             title: "Preços",
+            minValue: 0,
           },
           vAxis: { title: "Filiais" },
         }
       }
-      width={"100%"}
+      width={"95%"}
       height={"100%"}
-      legendToggle
+      loader={<div>Loading Chart</div>}
     />
   );
 }
