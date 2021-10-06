@@ -15,7 +15,7 @@ export const Container = styled.div`
 
 export const Image = styled.aside`
   flex:0; 
-  display: flex;
+ display: none;
   flex-direction: column;
   justify-content: center;
   align-items:center;
@@ -38,11 +38,11 @@ export const Image = styled.aside`
 
   @media (min-width: 1025px) {
     flex: 8;
+    display: flex;
     .sub {
-    display: block;
     font-family:"Roboto";
     color: rgb(100, 220, 220);
-    
+    display: block;
     font-size: 0.8em;
     letter-spacing: 1em;
   }
@@ -66,7 +66,7 @@ export const Logo = styled.img`
 export const MainContainer = styled.div`
   flex: 7;
   background: rgb(12, 12, 12);
-  height: 100vh;
+  min-height: 100vh;
   padding: 120px 80px;
   display: flex;
   flex-direction: column;
