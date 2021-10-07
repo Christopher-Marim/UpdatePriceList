@@ -1,17 +1,19 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Home } from "./pages/Home";
+import { HomeAdmin } from "./pages/HomeAdmin";
 import { Login } from "./pages/Login";
 
-import { AuthProvider } from "./hooks/auth";
+import { AuthProvider, useAuth } from "./hooks/auth";
+import { HomeFinanceiro } from "./pages/HomeFinanceiro";
 function App() {
   return (
     //<Login></Login>
 
     <BrowserRouter>
       <Switch>
-      <AuthProvider>
-        <Route path="/" exact component={Login} />
-        <Route path="/pages/UpdatePriceList" component={Home} />
+        <AuthProvider>
+          <Route path="/" exact component={Login} />
+          <Route path="/pages/HomeAdmin" component={HomeAdmin} />
+          <Route path="/pages/HomeFinanceiro" component={HomeFinanceiro} />
         </AuthProvider>
       </Switch>
     </BrowserRouter>

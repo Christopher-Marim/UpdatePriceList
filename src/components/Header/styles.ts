@@ -47,7 +47,7 @@ export const HeaderContainer = styled.div`
  
 `;
 export const HeaderName = styled.h1`
-    margin: 0;
+    margin-left: 80px;
     font-size: 50px;
     text-shadow: 3px 4px rgba(black, .1);
     transition: .3s;

@@ -38,8 +38,11 @@ export function Login() {
   }
 
   useEffect(() => {
-   if (user) {
-      history.push("/pages/UpdatePriceList");
+   if (user?.admin) {
+      history.push("/pages/HomeAdmin");
+   }
+   else{
+    history.push("/pages/HomeFinanceiro");
    }
   },[]);
 

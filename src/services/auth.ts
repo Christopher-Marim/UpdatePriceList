@@ -6,6 +6,7 @@ interface Response {
     nome: string,
     login: string,
     senha: string,
+    admin:boolean,
   };
 }
 interface RequestSignIn {
@@ -24,7 +25,8 @@ export async function signIn({ login, senha }: RequestSignIn): Promise<Response|
           user: {
             nome: `${user?.nome}`,
             login: `${login}`,
-            senha: `${senha}`
+            senha: `${senha}`,
+            admin: user?.admin=='1'?true:false
           }
         });
       });   

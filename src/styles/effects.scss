@@ -1,20 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:100");
 
-html,
-body,
-h1 {
-  padding: 0;
-  margin: 0;
-  font-family: "Montserrat", sans-serif;
-}
 
-div{
-  display: flex;
-  justify-content:center;
-  align-items: center;
-  flex-direction: column;
-  width: 100%;
-}
+
 
 #app {
   flex: 7;
@@ -39,6 +26,13 @@ div{
   background-position: center;
   z-index: 1;
 
+  div{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
 }
 
 #wrapper {

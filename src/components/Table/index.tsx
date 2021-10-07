@@ -1,4 +1,4 @@
-import { Product } from '../../pages/Home';
+import { Product } from '../../pages/HomeAdmin';
 import '../../styles/table.scss';
 
 

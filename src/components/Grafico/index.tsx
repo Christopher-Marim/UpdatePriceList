@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
-import { Product } from "../../pages/Home";
+import { Product } from "../../pages/HomeAdmin";
 
 interface Props {
   array: Product[];

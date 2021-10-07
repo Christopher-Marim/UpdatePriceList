@@ -6,6 +6,7 @@ interface User {
   nome: string;
   login: string;
   senha: string;
+  admin:boolean;
 }
 
 interface RequestSignIn {
@@ -44,7 +45,12 @@ const AuthProvider: React.FC = ({ children }) => {
       localStorage.clear();
       localStorage.setItem("UserETM",JSON.stringify(response.user));
 
-      history.push("/pages/UpdatePriceList");
+      if(response.user.admin==true){
+        history.push('pages/HomeAdmin')
+      }else{
+        history.push('pages/HomeFinanceiro')
+      }
+      
     }
     
     setLoading(false);

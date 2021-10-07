@@ -29,7 +29,7 @@ export interface Response {
   nomeTabela: string;
 }
 
-export function Home() {
+export function HomeAdmin() {
   const [codProduto, setcodProduto] = useState<string>("");
   const [listProdutos, setListProdutos] = useState<Product[]>([]);
   const [nameProduct, setNameProduct] = useState<string>("");
@@ -41,7 +41,9 @@ export function Home() {
 
   useEffect(() => {
     if (visibleContainerGrafic) {
-      setTimeout(()=>{setVisibleGrafic(true)},550) 
+      setTimeout(() => {
+        setVisibleGrafic(true);
+      }, 550);
     } else {
       setVisibleGrafic(false);
     }
@@ -91,19 +93,16 @@ export function Home() {
 
   //logica para pegar do listProdutos de produtos os produtos com o codigo digitado e retornar o preco médio deles
   async function getProduct(codProduct: string) {
-    await api
-      .get(`/pricelist?method=getProduto&codProduto=${codProduct}`)
-      .then((response) => {
-        if (response.data.data) {
-          console.log(response.data.data);
-          ModelListProdutos(response.data.data);
-        } else {
-          alert("Erro ao conectar!");
-        }
-      })
-      .catch((e) => {
-        console.error("Erro", e);
-      });
+    const response = await api.get(
+      `/pricelist?method=getProduto&codProduto=${codProduct}`
+    );
+
+    if (response?.data.data) {
+      console.log(response.data.data);
+      ModelListProdutos(response.data.data);
+    } else {
+      alert("Erro ao conectar!");
+    }
   }
 
   function getIdProdutoPriceList() {
@@ -162,7 +161,9 @@ export function Home() {
                 {nameProduct.length > 0 && (
                   <button
                     type="button"
-                    onClick={() => setVisibleContainerGrafic(!visibleContainerGrafic)}
+                    onClick={() =>
+                      setVisibleContainerGrafic(!visibleContainerGrafic)
+                    }
                   >
                     {!visibleContainerGrafic && "Mostrar tabela de dados"}
                     {visibleContainerGrafic && "Ocultar tabela de dados"}
@@ -203,8 +204,13 @@ export function Home() {
           </div>
         </MainHome>
       </div>
-      <ContainerGrafico style={{ flex: visibleContainerGrafic ?12 : 0, padding:visibleContainerGrafic?20:0 }}>
-        {visibleGrafic&&<Grafico array={listProdutos}></Grafico>}
+      <ContainerGrafico
+        style={{
+          flex: visibleContainerGrafic ? 12 : 0,
+          padding: visibleContainerGrafic ? 20 : 0,
+        }}
+      >
+        {visibleGrafic && <Grafico array={listProdutos}></Grafico>}
       </ContainerGrafico>
     </Container>
   );
