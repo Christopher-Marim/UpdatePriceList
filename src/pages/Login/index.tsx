@@ -38,12 +38,14 @@ export function Login() {
   }
 
   useEffect(() => {
-   if (user?.admin) {
-      history.push("/pages/HomeAdmin");
-   }
-   else{
-    history.push("/pages/HomeFinanceiro");
-   }
+    if(user){
+      if (user?.admin==true) {
+         history.push("/pages/HomeAdmin");
+      }
+      else{
+       history.push("/pages/HomeFinanceiro");
+      }
+    }
   },[]);
 
   async function HandleClickLogin() {

@@ -1,8 +1,5 @@
 import Rect, { useCallback, useEffect, useState } from "react";
-import {
-  AiOutlineCheckCircle,
-  AiFillDiff,
-} from "react-icons/ai";
+import { AiOutlineCheckCircle, AiFillDiff } from "react-icons/ai";
 import { IoReturnUpBackOutline } from "react-icons/io5";
 import { useDropzone } from "react-dropzone";
 import * as XLSX from "xlsx";
@@ -12,6 +9,7 @@ import {
   FormInput,
   FormP,
   FormWrapper,
+  HeaderInputs,
   NameCompany,
   Table,
   Wrapper,
@@ -19,18 +17,18 @@ import {
 import { Header } from "../../components/Header";
 
 import DataTable from "react-data-table-component";
+import { DatePicker } from "react-rainbow-components";
 import { FilterComponent } from "../../components/FilterComponent";
-import { useCurrent } from "../../hooks/state";
-import { exit } from "process";
-import api from "../../services/api";
+
 //import { Loader } from "../../components/Loader";
 import { useHistory } from "react-router";
 import { useAuth } from "../../hooks/auth";
-
-
+import { InputProps, SelectProps } from "../HomeAdmin";
+import api from "../../services/api";
 
 export function HomeFinanceiro() {
   const [error, setError] = useState(false);
+  const [isGet, setIsGet] = useState(false);
   const [loading, setLoading] = useState(false);
   const [company, setCompany] = useState();
   const [fileName, setFileName] = useState("");
@@ -41,6 +39,22 @@ export function HomeFinanceiro() {
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
 
+  const [headerDate, setHeaderDate] = useState<string>();
+  const [headerDescrition, setHeaderDescription] = useState<string>();
+  const [headerAdministradora, setHeaderAdministradora] = useState<string>();
+
+  function ChangeSelectedAdministradora(event: SelectProps) {
+    const text = event.target.value;
+    setHeaderAdministradora(text);
+  }
+  function ChangeTextDescription(event: InputProps) {
+    const text = event.target.value;
+    setHeaderDescription(text.toUpperCase());
+  }
+  function ChangeTextDate(event: InputProps) {
+    const textAux = event.target.value;
+    setHeaderDate(textAux);
+  }
 
   const { user } = useAuth();
   const history = useHistory();
@@ -85,7 +99,9 @@ export function HomeFinanceiro() {
     const dataStringLines = dataString.split(/\r\n|\n/);
     const headers = dataStringLines[0]
       .toLocaleLowerCase()
-      .replace(/\s/g, '')
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s/g, "")
       .split(/,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/);
 
     const list = [];
@@ -100,6 +116,9 @@ export function HomeFinanceiro() {
           if (d.length > 0) {
             if (d[0] == '"') d = d.substring(1, d.length - 1);
             if (d[d.length - 1] == '"') d = d.substring(d.length - 2, 1);
+          }
+          if (headers[j] == "nsu/cv") {
+            headers[j] = "numerodocv";
           }
           if (headers[j]) {
             obj[headers[j]] = d;
@@ -120,25 +139,43 @@ export function HomeFinanceiro() {
         alert(
           "Verifique se o nome das colunas foram preenchidos corretamente, precisa ter: nome, chapa, codpessoa, cpf"
         );
-      } 
+      }
+
+      if (c == "nsu/cv") {
+        const obj = {
+          name: "numerodocv",
+          selector: "numerodocv",
+          sortable: true,
+        };
+        return obj;
+      }
       const obj = {
         name: c,
-        selector: c.replace(/\s/g, ''),
+        selector: c
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/\s/g, ""),
         sortable: true,
       };
       return obj;
     });
 
-    console.log(columns);
 
+    if (columns.find((x: any) => x.name == "agencia")) {
+      setIsGet(false);
+      setHeaderAdministradora("REDE");
+    } else {
+      setHeaderAdministradora("GET");
+      setIsGet(true);
+    }
     setData(list);
-    console.log(list)
-    
+
     setColumns(columns);
   };
   const filteredItems = data.filter(
     (item) =>
-      item.datadavenda && item.datadavenda.toLowerCase().includes(filterText.toLowerCase())
+      item.numerodocv &&
+      item.numerodocv.toLowerCase().includes(filterText.toLowerCase())
   );
   const handleClear = () => {
     if (filterText) {
@@ -147,95 +184,152 @@ export function HomeFinanceiro() {
     }
   };
 
+  async function UploadHeader() {
+    try {
+      const response = await api.post(
+        `/borderocartoes?financeira=${headerAdministradora}&datavencimento=${headerDate}&identificaoextrato=${headerDescrition}&processado=0`
+      );
+      const id = response.data.data.id;
+      return id;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async function HandleClickUpload() {
     if (error) {
       alert("Upload negado! Existem valores nulos na tabela, favor verificar.");
     } else {
-      setLoading(true);
-      for (const pessoa of data) {
-        try {
-         /*  const response = await api.post(
-            
-          ); */
-        } catch (error) {
-          alert("Erro ao fazer Upload");
-          setLoading(false);
-          setData([]);
-          throw "exit";
+      if (headerAdministradora && headerDate && headerDescrition) {
+        if (isGet) {
+          setLoading(true);
+          const id = await UploadHeader();
+          console.log('IDDD', id)
+          for (const row of data) {
+            try {
+              const response = await api.post(
+                `/borderocartoesitem?borderocartoes_id=${id}&produto=${row.produto}&numerocv=${row.numerodocv}&estabelecimento=${row.codigoec}&parcela=${row.parcela}&parcelas=${row.totaldeparcelas}&valororiginal=${Number(row.valorbruto.replace(/[^0-9.-]+/g,""))}&valordesconto=${Number(row.descontos.replace(/[^0-9.-]+/g,""))}&valorliquido=${Number(row.liquido.replace(/[^0-9.-]+/g,""))}`
+              );
+            } catch (error) {
+              alert("Erro ao fazer Upload");
+              setLoading(false);
+              setData([]);
+              throw "exit";
+            }
+          }
+        } //IS REDE
+        else {
+          const id = await UploadHeader();
+          for (const row of data) {
+            try {
+              const response = await api.post(
+                `/borderocartoesitem?borderocartoes_id=${id}&produto=${row.modalidade}&numerocv=${row.numerodocv}&estabelecimento=${row.estabelecimento}&parcela=${row.parcela}&parcelas=${row.numerodeparcelas}&valororiginal=${Number(row.valorbrutodaparcelaoriginal.replace(/[^0-9.-]+/g,""))}&valordesconto=${Number(row.valormdrdescontado.replace(/[^0-9.-]+/g,""))}&valorliquido=${Number(row.valorliquidodaparcela.replace(/[^0-9.-]+/g,""))}`
+              );
+            } catch (error) {
+              alert("Erro ao fazer Upload");
+              setLoading(false);
+              setData([]);
+              throw "exit";
+            }
+          }
         }
+        alert("Upload feito com sucesso");
+        setData([]);
+      } else {
+        alert("Preencha todos os campos");
       }
-      alert("Upload feito com sucesso")
-      setData([]);
       setLoading(false);
     }
   }
 
   return (
     <>
-        <Container style={{display: loading?"none":"flex"}} >
-          <Header></Header>
-          <Wrapper>
-            <NameCompany>{'ETM'}</NameCompany>
-            <FormWrapper
-              className={classNameForm}
-              {...getRootProps()}
-              action="upload.php"
-              method="POST"
+      <Container style={{ display: loading ? "none" : "flex" }}>
+        <Header></Header>
+        <Wrapper>
+          <NameCompany>Header</NameCompany>
+          <HeaderInputs>
+            <select
+              value={headerAdministradora}
+              className="selectAdministradora"
             >
-              <FormInput {...getInputProps()} type="file" />
-              {data.length == 0 ? (
-                <div className="wrapper">
-                  <AiFillDiff color={"#7d7d7d"} size={70} />
-                  <FormP>
-                    Arraste o arquivo CSV para essa área ou click nela.
-                  </FormP>
-                </div>
-              ) : (
-                <div className="wrapper">
-                  <AiOutlineCheckCircle color="#117A60" size={70} />
-                  <FormP
-                    className={classNameP}
-                  >{`Arquivo ${fileName} carregado com sucesso!!`}</FormP>
-                </div>
-              )}
-            </FormWrapper>
-            {data.length > 0 && (
-              <>
-                <FilterComponent
-                  onFilter={(e: any) => setFilterText(e.target.value)}
-                  onClear={handleClear}
-                  filterText={filterText}
-                />
-                <span>
-                  {error
-                    ? "Existem valores nulo na tabela, favor verificar!"
-                    : ""}
-                </span>
-                <Table>
-                  <p className="titulo">Tabela de {fileName}</p>
-                  <DataTable
-                    highlightOnHover
-                    columns={columns}
-                    data={data}
-                    paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
-                    subHeader
-                    persistTableHead
-                  />
-                </Table>
-                <FormButton
-                  style={{
-                    background: error ? "#9c0000" : "#117A60",
-                  }}
-                  onClick={HandleClickUpload}
-                  type="submit"
-                >
-                  {error ? "CSV inválido" : "Fazer upload"}
-                </FormButton>
-              </>
+              <option value=""></option>
+              <option value="GET">GET</option>
+              <option value="REDE">REDE</option>
+            </select>
+            <input
+              value={headerDescrition}
+              onChange={ChangeTextDescription}
+              style={{ width: 300 }}
+              placeholder="Header name"
+              className="headerInput"
+            ></input>
+            <input
+              type="date"
+              value={headerDate}
+              onChange={ChangeTextDate}
+              className="headerInput"
+            ></input>
+          </HeaderInputs>
+          <FormWrapper
+            className={classNameForm}
+            {...getRootProps()}
+            action="upload.php"
+            method="POST"
+          >
+            <FormInput {...getInputProps()} type="file" />
+            {data.length == 0 ? (
+              <div className="wrapper">
+                <AiFillDiff color={"#7d7d7d"} size={70} />
+                <FormP>
+                  Arraste o arquivo CSV para essa área ou click nela.
+                </FormP>
+              </div>
+            ) : (
+              <div className="wrapper">
+                <AiOutlineCheckCircle color="#117A60" size={70} />
+                <FormP
+                  className={classNameP}
+                >{`Arquivo ${fileName} carregado com sucesso!!`}</FormP>
+              </div>
             )}
-          </Wrapper>
-        </Container>
-     
+          </FormWrapper>
+          {data.length > 0 && (
+            <>
+              <FilterComponent
+                onFilter={(e: any) => setFilterText(e.target.value)}
+                onClear={handleClear}
+                filterText={filterText}
+              />
+              <span>
+                {error
+                  ? "Existem valores nulo na tabela, favor verificar!"
+                  : ""}
+              </span>
+              <Table>
+                <p className="titulo">Tabela de {fileName}</p>
+                <DataTable
+                  highlightOnHover
+                  columns={columns}
+                  data={filteredItems}
+                  paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+                  subHeader
+                  persistTableHead
+                />
+              </Table>
+              <FormButton
+                style={{
+                  background: error ? "#9c0000" : "#117A60",
+                }}
+                onClick={HandleClickUpload}
+                type="submit"
+              >
+                {error ? "CSV inválido" : "Fazer upload"}
+              </FormButton>
+            </>
+          )}
+        </Wrapper>
+      </Container>
     </>
   );
 }

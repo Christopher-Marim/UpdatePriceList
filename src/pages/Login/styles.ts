@@ -161,7 +161,7 @@ export const Button = styled.button`
       color: #fff;
       background-color: black;
       border: 1px solid black;
-
+      cursor: pointer;
       &:hover {
         filter:brightness(0.8);
       }

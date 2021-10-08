@@ -6,8 +6,8 @@ import "../../styles/effects.scss";
 import { Grafico } from "../../components/Grafico";
 import { Container, ContainerGrafico, MainHome } from "./styles";
 
-interface InputProps extends React.ChangeEvent<HTMLInputElement> {}
-interface SelectProps extends React.ChangeEvent<HTMLSelectElement> {}
+export interface InputProps extends React.ChangeEvent<HTMLInputElement> {}
+export interface SelectProps extends React.ChangeEvent<HTMLSelectElement> {}
 export interface Product {
   id: string;
   codigo: string;

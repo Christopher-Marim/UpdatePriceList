@@ -28,9 +28,8 @@ export const Container = styled.div`
 `;
 export const NameCompany = styled.h1`
   font-size:20px;
-  font-weight: bold;
   font-family: 'Lato', Times, serif;
-  margin: 20px;
+  margin: 10px;
 `;
 export const Table = styled.table`
   display: block;
@@ -38,8 +37,7 @@ export const Table = styled.table`
   overflow:auto;
   margin-top:20px;
   width:100%;
-  min-height: 500px;
-  max-height: 500px;
+  max-height: 700px;
   border: 2px solid gray;
 
   .titulo{
@@ -86,6 +84,53 @@ export const FormP = styled.p`
       }
   
 `;
+
+export const HeaderInputs = styled.div` 
+    display:flex;
+    justify-content: center;
+    width: 700px;
+    padding: 10px 0px;
+    margin-bottom: 20px;
+
+    .selectAdministradora { 
+      display: block;
+      font-family: "Roboto", sans-serif;
+      background-color: #fff;
+      border-width: 1px;
+      border-color: gray;
+      color: #333;
+      font-size:18px;
+      border-radius: 0.5rem;
+      padding: 1rem 1rem;
+      margin-right: 10px;
+      padding: 0px 20px;
+      max-height: 60px;
+      max-width: 100px;
+      min-height: 45px;
+      cursor: pointer;
+
+     
+
+      @media (max-width: 1024px) {
+        font-size: 15px;
+      }
+  }
+
+  input{
+    display: flex;
+    align-items: center;
+    font-family: "Roboto", sans-serif;
+    font-size:18px;      
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 0.5rem;
+  }
+
+  .headerInput{
+      margin: 0 10px;    
+      width: 200px;
+  }  
+`;
 export const FormInput = styled.input`
     position: absolute;
     margin: 0;
@@ -120,7 +165,7 @@ export const FormButton = styled.button`
 
 export const FormWrapper = styled.form`
   background-color: #fff;
-    width: 500px;
+    width: 700px;
     height: 200px;
     border: 4px dashed gray;
 
