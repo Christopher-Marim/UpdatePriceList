@@ -1,4 +1,4 @@
-import Rect, { useCallback, useEffect, useState } from "react";
+import Rect, { useCallback, useEffect, useMemo, useState } from "react";
 import { AiOutlineCheckCircle, AiFillDiff } from "react-icons/ai";
 import { IoReturnUpBackOutline } from "react-icons/io5";
 import { useDropzone } from "react-dropzone";
@@ -25,6 +25,7 @@ import { useHistory } from "react-router";
 import { useAuth } from "../../hooks/auth";
 import { InputProps, SelectProps } from "../HomeAdmin";
 import api from "../../services/api";
+import { LoadingFile } from "../../components/LoadingFile";
 
 export function HomeFinanceiro() {
   const [error, setError] = useState(false);
@@ -137,18 +138,18 @@ export function HomeFinanceiro() {
       if (c.trim().length == 0) {
         setError(true);
         alert(
-          "Verifique se o nome das colunas foram preenchidos corretamente, precisa ter: nome, chapa, codpessoa, cpf"
+          "Verifique se o nome das colunas foram preenchidos corretamente"
         );
       }
 
-      if (c == "nsu/cv") {
+      if (c == "nsu/cv") {       
         const obj = {
           name: "numerodocv",
           selector: "numerodocv",
           sortable: true,
         };
         return obj;
-      }
+      } 
       const obj = {
         name: c,
         selector: c
@@ -159,19 +160,11 @@ export function HomeFinanceiro() {
       };
       return obj;
     });
-
-
-    if (columns.find((x: any) => x.name == "agencia")) {
-      setIsGet(false);
-      setHeaderAdministradora("REDE");
-    } else {
-      setHeaderAdministradora("GET");
-      setIsGet(true);
-    }
     setData(list);
 
     setColumns(columns);
-  };
+  };  
+
   const filteredItems = data.filter(
     (item) =>
       item.numerodocv &&
@@ -183,7 +176,6 @@ export function HomeFinanceiro() {
       setFilterText("");
     }
   };
-
   async function UploadHeader() {
     try {
       const response = await api.post(
@@ -193,6 +185,7 @@ export function HomeFinanceiro() {
       return id;
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   }
 
@@ -201,14 +194,25 @@ export function HomeFinanceiro() {
       alert("Upload negado! Existem valores nulos na tabela, favor verificar.");
     } else {
       if (headerAdministradora && headerDate && headerDescrition) {
-        if (isGet) {
+        if (headerAdministradora=='GET') {
           setLoading(true);
           const id = await UploadHeader();
-          console.log('IDDD', id)
           for (const row of data) {
             try {
               const response = await api.post(
-                `/borderocartoesitem?borderocartoes_id=${id}&produto=${row.produto}&numerocv=${row.numerodocv}&estabelecimento=${row.codigoec}&parcela=${row.parcela}&parcelas=${row.totaldeparcelas}&valororiginal=${Number(row.valorbruto.replace(/[^0-9.-]+/g,""))}&valordesconto=${Number(row.descontos.replace(/[^0-9.-]+/g,""))}&valorliquido=${Number(row.liquido.replace(/[^0-9.-]+/g,""))}`
+                `/borderocartoesitem?borderocartoes_id=${id}&produto=${
+                  row.produto
+                }&numerocv=${row.numerodocv}&estabelecimento=${
+                  row.codigoec
+                }&parcela=${row.parcela}&parcelas=${
+                  row.totaldeparcelas
+                }&valororiginal=${Number(
+                  row.valorbruto.replace(/[^0-9.-]+/g, "")
+                )}&valordesconto=${Number(
+                  row.descontos.replace(/[^0-9.-]+/g, "")
+                )}&valorliquido=${Number(
+                  row.liquido.replace(/[^0-9.-]+/g, "")
+                )}`
               );
             } catch (error) {
               alert("Erro ao fazer Upload");
@@ -218,12 +222,25 @@ export function HomeFinanceiro() {
             }
           }
         } //IS REDE
-        else {
+        if(headerAdministradora=='REDE') {
+          setLoading(true);
           const id = await UploadHeader();
           for (const row of data) {
             try {
               const response = await api.post(
-                `/borderocartoesitem?borderocartoes_id=${id}&produto=${row.modalidade}&numerocv=${row.numerodocv}&estabelecimento=${row.estabelecimento}&parcela=${row.parcela}&parcelas=${row.numerodeparcelas}&valororiginal=${Number(row.valorbrutodaparcelaoriginal.replace(/[^0-9.-]+/g,""))}&valordesconto=${Number(row.valormdrdescontado.replace(/[^0-9.-]+/g,""))}&valorliquido=${Number(row.valorliquidodaparcela.replace(/[^0-9.-]+/g,""))}`
+                `/borderocartoesitem?borderocartoes_id=${id}&produto=${
+                  row.modalidade
+                }&numerocv=${row.numerodocv}&estabelecimento=${
+                  row.estabelecimento
+                }&parcela=${row.parcela}&parcelas=${
+                  row.numerodeparcelas
+                }&valororiginal=${Number(
+                  row.valorbrutodaparcelaoriginal.replace(/[^0-9.-]+/g, "")
+                )}&valordesconto=${Number(
+                  row.valormdrdescontado.replace(/[^0-9.-]+/g, "")
+                )}&valorliquido=${Number(
+                  row.valorliquidodaparcela.replace(/[^0-9.-]+/g, "")
+                )}`
               );
             } catch (error) {
               alert("Erro ao fazer Upload");
@@ -239,11 +256,15 @@ export function HomeFinanceiro() {
         alert("Preencha todos os campos");
       }
       setLoading(false);
+      setHeaderAdministradora('');
+      setHeaderDate('');
+      setHeaderDescription('');
     }
   }
 
   return (
     <>
+    {loading&&(<LoadingFile></LoadingFile>)}
       <Container style={{ display: loading ? "none" : "flex" }}>
         <Header></Header>
         <Wrapper>
@@ -252,6 +273,7 @@ export function HomeFinanceiro() {
             <select
               value={headerAdministradora}
               className="selectAdministradora"
+              onChange={ChangeSelectedAdministradora}
             >
               <option value=""></option>
               <option value="GET">GET</option>

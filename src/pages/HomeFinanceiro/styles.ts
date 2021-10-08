@@ -105,7 +105,7 @@ export const HeaderInputs = styled.div`
       margin-right: 10px;
       padding: 0px 20px;
       max-height: 60px;
-      max-width: 100px;
+      max-width: 120px;
       min-height: 45px;
       cursor: pointer;
 
@@ -153,6 +153,7 @@ export const FormButton = styled.button`
     border-radius: 4px;
     transition: all .2s ease;
     outline: none;
+    cursor: pointer;
 
     &:hover{
     filter: brightness(0.8);
