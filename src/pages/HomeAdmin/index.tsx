@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import api from "../../services/api";
+import { AiOutlineFileSync } from "react-icons/ai";
 
 import "../../styles/effects.scss";
 import { Grafico } from "../../components/Grafico";
@@ -93,14 +94,13 @@ export function HomeAdmin() {
 
   //logica para pegar do listProdutos de produtos os produtos com o codigo digitado e retornar o preco médio deles
   async function getProduct(codProduct: string) {
-    const response = await api.get(
-      `/pricelist?method=getProduto&codProduto=${codProduct}`
-    );
-
-    if (response?.data.data) {
+    try {
+      const response = await api.get(
+        `/pricelist?method=getProduto&codProduto=${codProduct}`
+      );
       console.log(response.data.data);
       ModelListProdutos(response.data.data);
-    } else {
+    } catch (error) {
       alert("Erro ao conectar!");
     }
   }
@@ -120,6 +120,24 @@ export function HomeAdmin() {
     await api
       .get(
         `/pricelist?method=setPreco&codRegistro=${codRegistro}&novoValor=${priceProduct}`
+      )
+      .then((response) => {
+        if (response.data.data) {
+          getProduct(codProduto);
+          setPriceProduct("");
+          alert("Sucesso");
+        } else {
+          alert("Erro ao conectar!");
+        }
+      })
+      .catch((e) => {
+        console.error("Erro", e);
+      });
+  }
+  async function SyncProduct() {
+    await api
+      .get(
+        `/pricelist?method=addPreco&destino=${filialSelected}&origem=999`
       )
       .then((response) => {
         if (response.data.data) {
@@ -185,20 +203,25 @@ export function HomeAdmin() {
               />
               <p id="sugestionPrice">{priceProductAverage}</p>
               <p>Filial</p>
-              <select id="filiais" onChange={ChangeSelectedFilial}>
-                <option value="001">Smartcase RBA - 01</option>
-                <option value="003">Smartcase RCR - 02</option>
-                <option value="002">Smartcase CBF - 03</option>
-                <option value="006">Smartcase BLV - 04</option>
-                <option value="013">Smartcase QSQPLZ - 05</option>
-                <option value="011">Smartcase AMS - 07</option>
-                <option value="005">Smartcase SJD - 08</option>
-                <option value="006">Smartcase QSQBLV - 09</option>
-                <option value="007">Smartcase PLZ - 11</option>
-                <option value="014">Smartcase BVV - 12</option>
-              </select>
+              <div id="containerSync">
+                <select id="filiais" onChange={ChangeSelectedFilial}>
+                  <option value="001">Smartcase RBA - 01</option>
+                  <option value="003">Smartcase RCR - 02</option>
+                  <option value="002">Smartcase CBF - 03</option>
+                  <option value="006">Smartcase BLV - 04</option>
+                  <option value="013">Smartcase QSQPLZ - 05</option>
+                  <option value="011">Smartcase AMS - 07</option>
+                  <option value="005">Smartcase SJD - 08</option>
+                  <option value="006">Smartcase QSQBLV - 09</option>
+                  <option value="007">Smartcase PLZ - 11</option>
+                  <option value="014">Smartcase BVV - 12</option>
+                </select>
+                <button id="sync" type="button" onClick={SyncProduct} >
+                  <AiOutlineFileSync size={40}></AiOutlineFileSync>
+                </button>
+              </div>
               <button type="button" onClick={UpdatePrice}>
-                Enviar
+                Alterar Preço
               </button>
             </form>
           </div>

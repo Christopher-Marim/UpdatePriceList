@@ -1,31 +1,28 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-flex: 1;
-display: flex;
-justify-content: center;
-flex-direction: row;
-align-items: center;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
 
-@media (max-width: 1024px) {
-  flex-direction: column;
-        }
-
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
 `;
 
 export const ContainerGrafico = styled.div`
- display: flex; 
+  display: flex;
   width: 100%;
   height: 100vh;
-  background-color:#fff;
-  color:black;
-  overflow:hidden;
-  transition:flex ease-in-out 500ms;
-  
+  background-color: #fff;
+  color: black;
+  overflow: hidden;
+  transition: flex ease-in-out 500ms;
 `;
 
 export const MainHome = styled.div`
-  
   form {
     flex: 8;
     display: flex;
@@ -36,21 +33,21 @@ export const MainHome = styled.div`
     padding: 20px 0px;
     align-items: center;
 
-    #wrapperTable{
+    #wrapperTable {
       display: flex;
       width: 100%;
-      
-      button{
+
+      button {
         background-color: transparent;
         width: 50%;
         font-size: 0.75rem;
         border-radius: 0px;
-        border-width: 0px;     
-        align-items:flex-start;
+        border-width: 0px;
+        align-items: flex-start;
         margin: 0px;
         padding: 5px 0px;
         &:hover {
-          text-decoration:underline
+          text-decoration: underline;
         }
 
         @media (max-width: 1024px) {
@@ -62,7 +59,7 @@ export const MainHome = styled.div`
     p {
       font-size: 18px;
       padding: 1.25rem 0px;
-      color:white;
+      color: white;
       font-family: "Roboto", sans-serif;
       align-items: flex-start;
       width: 100%;
@@ -75,12 +72,12 @@ export const MainHome = styled.div`
     #sugestionPrice {
       padding: 5px 0px;
       color: #00fff9;
-      font-size: .75rem;
+      font-size: 0.75rem;
       @media (max-width: 1024px) {
-          font-size: 10px;
-        }
+        font-size: 10px;
+      }
     }
-   
+
     input {
       font-family: "Roboto", sans-serif;
       color: #333;
@@ -106,7 +103,7 @@ export const MainHome = styled.div`
       appearance: none;
       background-color: #fff;
       color: #333;
-      font-size:18px;
+      font-size: 18px;
       border-radius: 0.5rem;
       border: none;
       padding: 1rem 1rem;
@@ -127,8 +124,12 @@ export const MainHome = styled.div`
 
     button {
       font-family: "Roboto", sans-serif;
+      display: flex;
+
+      justify-content: center;
+      align-items: center;
       appearance: none;
-      letter-spacing:0.1rem;
+      letter-spacing: 0.1rem;
       background-color: #009e9b;
       color: #fff;
       font-size: 18px;
@@ -142,13 +143,31 @@ export const MainHome = styled.div`
       margin: 50px 0px;
 
       &:hover {
-        filter:brightness(0.9)
+        filter: brightness(0.9);
       }
 
       @media (max-width: 1024px) {
         font-size: 15px;
       }
     }
-  }
 
+    #containerSync {
+      display: flex;
+      flex-direction: row;
+      margin-top: -40px;
+      justify-content: space-between;
+      
+      #sync {
+        border: none;
+        background-color: transparent;
+        padding: 0px;
+        width: 50px;
+        margin-left: 20px;
+
+        &:hover {
+          color: #009e9b;
+        }
+      }
+    }
+  }
 `;
