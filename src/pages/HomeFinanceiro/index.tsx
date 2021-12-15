@@ -357,6 +357,7 @@ export function HomeFinanceiro() {
             </>
           )}
         </Wrapper>
+        <p className="criador">By Christopher Marim</p>
       </Container>
     </>
   );

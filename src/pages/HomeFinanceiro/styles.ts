@@ -7,6 +7,16 @@ export const Container = styled.div`
   align-items: center;
   min-height: 100vh;
   background: linear-gradient(#68e9be, #363f6e, #080c30);
+  
+  .criador{
+    color:#68e9be65;
+    display:flex;
+    position: absolute;
+    bottom:0;
+    margin:20px;
+    right:0;
+    font-size:13px
+  }
 
   .wrapper{
       display: flex;
@@ -101,6 +111,7 @@ export const HeaderInputs = styled.div`
       display: block;
       font-family: "Roboto", sans-serif;
       background-color: transparent;
+      
       border-width: 2.5px;
       border-color: white;
       color: white;
@@ -113,7 +124,10 @@ export const HeaderInputs = styled.div`
       max-width: 120px;
       min-height: 45px;
       cursor: pointer;
-
+  
+      option{
+        background: #363f6e;
+      }
      
 
       @media (max-width: 1024px) {
