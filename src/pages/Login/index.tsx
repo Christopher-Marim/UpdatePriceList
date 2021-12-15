@@ -40,13 +40,13 @@ export function Login() {
   useEffect(() => {
     if(user){
       if (user?.admin==true) {
-         history.push("/pages/HomeAdmin");
+         history.push("/pages/HomeFinanceiro");
       }
       else{
        history.push("/pages/HomeFinanceiro");
       }
     }
-  },[]);
+  },[user]);
 
   async function HandleClickLogin() {
     const login = {

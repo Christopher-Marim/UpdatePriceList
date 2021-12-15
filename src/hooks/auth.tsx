@@ -6,7 +6,7 @@ interface User {
   nome: string;
   login: string;
   senha: string;
-  admin:boolean;
+  admin: boolean;
 }
 
 interface RequestSignIn {
@@ -29,30 +29,34 @@ const AuthProvider: React.FC = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
-
   useEffect(() => {
-    var userAux =  localStorage.getItem('UserETM');
-    if(userAux){
-      setUser(JSON.parse(userAux))
+    var userAux = localStorage.getItem("UserETM");
+    if (userAux) {
+      setUser(JSON.parse(userAux));
     }
-  },[])
+  }, []);
+
+
+  function navegacao(admin: boolean) {
+    if (admin == true) {
+      history.push("pages/HomeAdmin");
+    } else {
+      history.push("pages/HomeFinanceiro");
+    }
+  }
+
 
   async function signIn({ login, senha }: RequestSignIn) {
     setLoading(true);
-    const response = await auth.signIn({ login, senha });
-    if(response){
-      setUser(response.user);
-      localStorage.clear();
-      localStorage.setItem("UserETM",JSON.stringify(response.user));
-
-      if(response.user.admin==true){
-        history.push('pages/HomeAdmin')
-      }else{
-        history.push('pages/HomeFinanceiro')
+      const response = await auth.signIn({ login, senha });
+      if (response) {
+        setUser(response.user);
+        localStorage.clear();
+        localStorage.setItem("UserETM", JSON.stringify(response.user));
+        navegacao(response.user.admin);
       }
-      
-    }
     
+
     setLoading(false);
   }
   async function signOut() {
