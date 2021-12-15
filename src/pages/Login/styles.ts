@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import logo from '../../assets/backgroundImage.jpg' 
 import px2vw from "../../utils/px2vw";
 
 export const Container = styled.div`
@@ -27,7 +28,7 @@ export const Image = styled.aside`
       black 3px,
       black 3px
     ),
-    url("https://images.unsplash.com/photo-1506399558188-acca6f8cbf41?ixlib=rb-0.3.5&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ&s=7118759521e3184778a3b5e010e202c6");
+    url(${logo});
   background-size: cover;
   background-position: center;
   z-index: 1;
@@ -87,7 +88,7 @@ export const MainContainer = styled.div`
       black 3px,
       black 3px
     ),
-    url("https://images.unsplash.com/photo-1506399558188-acca6f8cbf41?ixlib=rb-0.3.5&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ&s=7118759521e3184778a3b5e010e202c6");
+    url(${logo});
   background-size: cover;
 
   div{ 

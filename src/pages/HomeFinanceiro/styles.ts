@@ -6,7 +6,7 @@ export const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   min-height: 100vh;
-  background: #e3e3e3;
+  background: linear-gradient(#68e9be, #363f6e, #080c30);
 
   .wrapper{
       display: flex;
@@ -17,8 +17,7 @@ export const Container = styled.div`
   .icon{
     margin-left: 20px;
 
-    &:hover{
-      background-color: #ddd;
+    &:hover{;
       border-width: 2px;
       box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; 
       border-radius: 100px;
@@ -30,15 +29,18 @@ export const NameCompany = styled.h1`
   font-size:20px;
   font-family: 'Lato', Times, serif;
   margin: 10px;
+  color:white;
 `;
 export const Table = styled.table`
   display: block;
   background-color: white;
   overflow:auto;
   margin-top:20px;
+  color:black;
   width:100%;
   max-height: 700px;
-  border: 2px solid gray;
+  border: 2px solid white;
+  border-radius:10px;
 
   .titulo{
     margin-top:20px;
@@ -48,6 +50,7 @@ export const Table = styled.table`
     width: 100%;
     font-weight: bold;
   }
+  
 `;
 
 export const Wrapper = styled.div`
@@ -55,6 +58,7 @@ export const Wrapper = styled.div`
   margin-top: 140px;
   justify-content: space-between;
   background-color: transparent;
+  color:white;
   align-items: center;
   flex-direction: column;
   width: 700px;
@@ -74,12 +78,13 @@ export const FormP = styled.p`
     height: 100%;
     text-align: center;
     line-height: 170px;
-    color: gray;
+    background-color: transparent;
+    color: white;
     font-family: Arial;
     font-size: 18px;
 
     &.completeP {
-        color:#117A60;
+        color:#23f350;
         font-size: 18px;
       }
   
@@ -95,10 +100,10 @@ export const HeaderInputs = styled.div`
     .selectAdministradora { 
       display: block;
       font-family: "Roboto", sans-serif;
-      background-color: #fff;
-      border-width: 1px;
-      border-color: gray;
-      color: #333;
+      background-color: transparent;
+      border-width: 2.5px;
+      border-color: white;
+      color: white;
       font-size:18px;
       border-radius: 0.5rem;
       padding: 1rem 1rem;
@@ -119,11 +124,16 @@ export const HeaderInputs = styled.div`
   input{
     display: flex;
     align-items: center;
+    background-color: transparent;
+    border: 2.5px solid white;
+    color: white;
     font-family: "Roboto", sans-serif;
     font-size:18px;      
-    padding: 10px;
-    border: 1px solid gray;
+    padding: 10px; 
     border-radius: 0.5rem;
+    &::placeholder{
+      color:white;
+    }
   }
 
   .headerInput{
@@ -139,6 +149,8 @@ export const FormInput = styled.input`
     height: 100%;
     outline: none;
     opacity: 0;
+    background-color: transparent;
+    color: white;
   
 `;
 export const FormButton = styled.button`
@@ -165,12 +177,13 @@ export const FormButton = styled.button`
 `;
 
 export const FormWrapper = styled.form`
-  background-color: #fff;
+  background-color: transparent;
+    color: white;
     width: 700px;
     height: 200px;
-    border: 4px dashed gray;
+    border: 4px dashed white;
 
     &.complete {
-        border: 4px dashed #117A60;
+        border: 4px dashed white;
       }
 `;

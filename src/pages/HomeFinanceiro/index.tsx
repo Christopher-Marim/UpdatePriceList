@@ -26,6 +26,7 @@ import { useAuth } from "../../hooks/auth";
 import { InputProps, SelectProps } from "../HomeAdmin";
 import api from "../../services/api";
 import { LoadingFile } from "../../components/LoadingFile";
+import { borderColor } from "@material-ui/system";
 
 export function HomeFinanceiro() {
   const [error, setError] = useState(false);
@@ -302,14 +303,14 @@ export function HomeFinanceiro() {
             <FormInput {...getInputProps()} type="file" />
             {data.length == 0 ? (
               <div className="wrapper">
-                <AiFillDiff color={"#7d7d7d"} size={70} />
+                <AiFillDiff color={'white'} size={70} style={{marginTop:20}}/>
                 <FormP>
                   Arraste o arquivo CSV para essa área ou click nela.
                 </FormP>
               </div>
             ) : (
               <div className="wrapper">
-                <AiOutlineCheckCircle color="#117A60" size={70} />
+                <AiOutlineCheckCircle color="#23f350" size={70} style={{marginTop:20}} />
                 <FormP
                   className={classNameP}
                 >{`Arquivo ${fileName} carregado com sucesso!!`}</FormP>
@@ -336,12 +337,17 @@ export function HomeFinanceiro() {
                   data={filteredItems}
                   paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
                   subHeader
+                  style={{backgroundColor:"transparent", color:'white'}}
                   persistTableHead
                 />
               </Table>
               <FormButton
                 style={{
-                  background: error ? "#9c0000" : "#117A60",
+                  background: "transparent",
+                  borderWidth:2,
+                  borderStyle:"solid",
+                  borderColor:error ? "#fa0000" :"white",
+                  color:error ? "#fa0000" :'white'
                 }}
                 onClick={HandleClickUpload}
                 type="submit"

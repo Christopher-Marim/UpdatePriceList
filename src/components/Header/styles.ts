@@ -10,7 +10,8 @@ export const HeaderContainer = styled.div`
     font-weight: bold;
     align-items: center;
     text-align: center;
-    background: white;
+    background: transparent;
+    color:white;
     transition: .3s;
 
     .icon{
@@ -51,6 +52,7 @@ export const HeaderName = styled.h1`
     font-size: 50px;
     text-shadow: 3px 4px rgba(black, .1);
     transition: .3s;
+    color:white;
  
 `;
 export const Logo = styled.img`

@@ -24,7 +24,7 @@ export function Header({children}:Props) {
     <HeaderContainer className={'small'}>
       {classNameText=='small'?children?children:<span></span>:<span></span>}
       <HeaderName>
-        ETM
+        Financeiro
       </HeaderName>
       <ImExit size={35} style={{marginRight:30}} 
               className={"icon"}
