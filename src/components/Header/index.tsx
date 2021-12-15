@@ -11,20 +11,18 @@ import { useAuth } from "../../hooks/auth";
 
 
 interface Props {
-  children?:JSX.Element
+  nome?:string;
 }
 
-export function Header({children}:Props) {
+export function Header({nome}:Props) {
    const history = useHistory();
    const {signOut} = useAuth();
-
-  const [classNameText, setClassNameText] = useState<string>("small");
   
   return (
     <HeaderContainer className={'small'}>
-      {classNameText=='small'?children?children:<span></span>:<span></span>}
+      <div></div>
       <HeaderName>
-        Financeiro
+        {nome}
       </HeaderName>
       <ImExit size={35} style={{marginRight:30}} 
               className={"icon"}

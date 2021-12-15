@@ -6,7 +6,10 @@ import { AiOutlineFileSync } from "react-icons/ai";
 import "../../styles/effects.scss";
 import { Grafico } from "../../components/Grafico";
 import { Container, ContainerGrafico, MainHome } from "./styles";
+import { useHistory } from "react-router";
+import { useAuth } from "../../hooks/auth";
 
+import { ImExit } from "react-icons/im";
 export interface InputProps extends React.ChangeEvent<HTMLInputElement> {}
 export interface SelectProps extends React.ChangeEvent<HTMLSelectElement> {}
 export interface Product {
@@ -39,6 +42,9 @@ export function HomeAdmin() {
   const [filialSelected, setFilialSelected] = useState<string>("001");
   const [visibleContainerGrafic, setVisibleContainerGrafic] = useState(false);
   const [visibleGrafic, setVisibleGrafic] = useState(false);
+
+  const history = useHistory();
+  const {signOut} = useAuth();
 
   useEffect(() => {
     if (visibleContainerGrafic) {
@@ -160,6 +166,13 @@ export function HomeAdmin() {
         <MainHome>
           <div>
             <div id="wrapper">
+              <ImExit size={35} color='white' style={{position:"absolute", top:30, right:40,cursor:'pointer'}} 
+              className={"icon"}
+              onClick={ () => {
+                signOut();
+                history.push('/');
+              }}/>
+           
               <h1 className="glitch" data-text="ETM">
                 ETM
               </h1>

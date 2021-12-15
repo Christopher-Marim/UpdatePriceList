@@ -267,7 +267,7 @@ export function HomeFinanceiro() {
     <>
     {loading&&(<LoadingFile></LoadingFile>)}
       <Container style={{ display: loading ? "none" : "flex" }}>
-        <Header></Header>
+        <Header nome='Financeiro'></Header>
         <Wrapper>
           <NameCompany>Header</NameCompany>
           <HeaderInputs>
