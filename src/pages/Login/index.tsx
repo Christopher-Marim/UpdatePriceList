@@ -40,7 +40,7 @@ export function Login() {
   useEffect(() => {
     if(user){
       if (user?.admin==true) {
-         history.push("/pages/HomeFinanceiro");
+         history.push("/pages/HomeAdmin");
       }
       else{
        history.push("/pages/HomeFinanceiro");
