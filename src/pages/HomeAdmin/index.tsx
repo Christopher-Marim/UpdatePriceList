@@ -95,7 +95,7 @@ export function HomeAdmin() {
       inicialValue = inicialValue + preco;
     });
     const media = inicialValue / response.length;
-    setPriceProductAverage(`Preço médio: ${media.toFixed(2)}`);
+    setPriceProductAverage(`Preço médio R$${media.toFixed(2).replace('.',',')}`);
   }
 
   //logica para pegar do listProdutos de produtos os produtos com o codigo digitado e retornar o preco médio deles
@@ -125,19 +125,18 @@ export function HomeAdmin() {
     const codRegistro = getIdProdutoPriceList();
     await api
       .get(
-        `/pricelist?method=setPreco&codRegistro=${codRegistro}&novoValor=${priceProduct}`
+        `/pricelist?method=setPreco&codRegistro=${codRegistro}&novoValor=${priceProduct.replace(',','.')}`
       )
       .then((response) => {
         if (response.data.data) {
           getProduct(codProduto);
           setPriceProduct("");
           alert("Sucesso");
-        } else {
-          alert("Erro ao conectar!");
         }
       })
       .catch((e) => {
         console.error("Erro", e);
+        alert("Erro ao conectar!");
       });
   }
   async function SyncProduct() {
@@ -156,6 +155,7 @@ export function HomeAdmin() {
       })
       .catch((e) => {
         console.error("Erro", e);
+        alert("Erro ao conectar!");
       });
   }
   //exemplo listProdutos de resposta da api
@@ -192,6 +192,7 @@ export function HomeAdmin() {
                 {nameProduct.length > 0 && (
                   <button
                     type="button"
+                    style={{cursor:'pointer'}}
                     onClick={() =>
                       setVisibleContainerGrafic(!visibleContainerGrafic)
                     }

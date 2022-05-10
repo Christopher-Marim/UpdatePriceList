@@ -83,8 +83,8 @@ export const MainHome = styled.div`
       color: #333;
       font-size: 18px;
       margin: 0 auto;
-      padding: 1rem 1rem;
-      max-height: 60px;
+      padding: 0.8rem 0.8rem;
+      max-height: 70px;
       min-height: 45px;
       border-radius: 0.5rem;
       background-color: rgb(255, 255, 255);
@@ -106,12 +106,12 @@ export const MainHome = styled.div`
       font-size: 18px;
       border-radius: 0.5rem;
       border: none;
-      padding: 1rem 1rem;
+      padding: 0.8rem 0.8rem;
       margin: 0 auto;
       width: 100%;
-      max-height: 60px;
+      max-height: 70px;
       min-height: 45px;
-      cursor: inherit;
+      cursor: pointer;
       line-height: inherit;
 
       // Stack above custom arrow
@@ -134,11 +134,11 @@ export const MainHome = styled.div`
       color: #fff;
       font-size: 18px;
       border-radius: 0.5rem;
-      max-height: 60px;
+      max-height: 70px;
       min-height: 45px;
       border: 1;
       border-color: #fff;
-      padding: 1rem 1rem;
+      padding: 0.8rem 0.8rem;
       width: 50%;
       margin: 50px 0px;
 
@@ -156,7 +156,7 @@ export const MainHome = styled.div`
       flex-direction: row;
       margin-top: -40px;
       justify-content: space-between;
-      
+
       #sync {
         border: none;
         background-color: transparent;
