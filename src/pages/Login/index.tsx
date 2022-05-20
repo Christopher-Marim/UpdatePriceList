@@ -38,61 +38,66 @@ export function Login() {
   }
 
   useEffect(() => {
-    if(user){
-      if (user?.admin==true) {
-         history.push("/pages/Home");
-      }
-      else{
-       history.push("/pages/HomeFinanceiro");
+    if (user) {
+      if (user?.admin == true) {
+        history.push("/pages/Home");
+      } else {
+        history.push("/pages/HomeFinanceiro");
       }
     }
-  },[user]);
+  }, [user]);
 
   async function HandleClickLogin() {
     const login = {
       login: loginText,
       senha: passwordText,
     };
-    await signIn(login); 
+    await signIn(login);
   }
 
   return (
-      <Container>
-        <Image>
+    <Container>
+      <Image>
+        <h1>ETM</h1>
+        <span className="sub">Consultoria e Sistemas</span>
+      </Image>
+      <MainContainer>
+        <div>
           <h1>ETM</h1>
-          <span className='sub'>Consultoria e Sistemas</span>
-        </Image>
-        <MainContainer>
-          <div>
-            <h1>ETM</h1>
-            <span className='sub'>Consultoria e Sistemas</span>
-          </div>
-          <FormContainer>
-          <Titulo>
-            LOGIN
-          </Titulo>
-            <Input
-              onChange={ChangeTextLogin}
-              value={loginText}
-              type="text"
-              placeholder="Email"
-            />
-            <Input              
-              onChange={ChangeTextPassoword}
-              value={passwordText}
-              type="password"
-              placeholder="Senha"
-            />
-            <Button type="button" onClick={HandleClickLogin}>
-              Entrar
-            </Button>
-            <Link href="http://www.etm.srv.br/" target="_blank">
-              Preciso de ajuda
-            </Link>
-          </FormContainer>
-          <div></div>
-          <div></div>
-        </MainContainer>
-      </Container>
+          <span className="sub">Consultoria e Sistemas</span>
+        </div>
+        <FormContainer>
+          <Titulo>LOGIN</Titulo>
+          <Input
+            onChange={ChangeTextLogin}
+            value={loginText}
+            type="text"
+            placeholder="Email"
+          />
+          <Input
+            onChange={ChangeTextPassoword}
+            value={passwordText}
+            type="password"
+            placeholder="Senha"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                HandleClickLogin()
+              }
+            }}
+          />
+          <Button
+            type="button"
+            onClick={HandleClickLogin}
+          >
+            Entrar
+          </Button>
+          <Link href="http://www.etm.srv.br/" target="_blank">
+            Preciso de ajuda
+          </Link>
+        </FormContainer>
+        <div></div>
+        <div></div>
+      </MainContainer>
+    </Container>
   );
 }

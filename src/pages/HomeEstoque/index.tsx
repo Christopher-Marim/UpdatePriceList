@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../../services/api";
 
 import "../../styles/effects.scss";
-import { Container,  MainHome } from "./styles";
+import { Container, MainHome } from "./styles";
 import { useHistory } from "react-router";
 import { useAuth } from "../../hooks/auth";
 
@@ -17,21 +17,29 @@ export interface APK {
 
 export function HomeEstoque() {
   const history = useHistory();
-  const {signOut} = useAuth();
+  const { signOut } = useAuth();
 
-  const [apks, setApks] = useState<APK[]>([])
+  const [apks, setApks] = useState<APK[]>([]);
 
-  useEffect(()=>{
-    /* getApks() */
-  },[])
+  useEffect(() => {
+    (async () => await getApks())();
+  }, []);
 
-  async function getApks(codProduct: string) {
+  async function getApks() {
     try {
-      const response = await api.get(
-        `/`
-      );
-      console.log(response.data.data);
-      setApks(response.data.data as APK[])
+      const response = await api.get(`/listapktai?method=listapk`);
+      let apksaux = response.data.data;
+      const apk = apksaux.map((x: any) => {
+        let aux: APK = {
+          id: x.id,
+          nome: x.tai_descricao,
+          link: x.tai_valor,
+        };
+        return aux;
+      });
+      console.log(apk);
+
+      setApks(apk);
     } catch (error) {
       alert("Erro ao conectar!");
     }
@@ -43,21 +51,34 @@ export function HomeEstoque() {
         <MainHome>
           <div>
             <div id="wrapper">
-              <ImExit size={35} color='white' style={{position:"absolute", top:30, right:40,cursor:'pointer'}} 
-              className={"icon"}
-              onClick={ () => {
-                signOut();
-                history.push('/');
-              }}/>
-           
+              <ImExit
+                size={35}
+                color="white"
+                style={{
+                  position: "absolute",
+                  top: 30,
+                  right: 40,
+                  cursor: "pointer",
+                }}
+                className={"icon"}
+                onClick={() => {
+                  signOut();
+                  history.push("/");
+                }}
+              />
+
               <h1 className="glitch" data-text="ETM">
                 ETM
               </h1>
               <span className="sub">Consultoria e Sistemas</span>
             </div>
-            <form className='list'>
+            <form className="list">
               <h4>APKS</h4>
-              <a href="https://exp-shell-app-assets.s3.us-west-1.amazonaws.com/android/%40christophermarim/WiseCollect-3359761b9fdc42aaa402befafe951b4a-signed.aab">WiseCollect</a>
+              {apks.map((apk) => (
+                <a key={apk.id} href={`${apk.link}`}>
+                  {apk.nome}
+                </a>
+              ))}
             </form>
           </div>
         </MainHome>

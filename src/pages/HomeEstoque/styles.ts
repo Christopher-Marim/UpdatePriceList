@@ -28,6 +28,7 @@ export const MainHome = styled.div`
     flex-direction:column ;
     justify-content: flex-start;
     align-items: center;
+    overflow:auto; 
 
     width: 30%;
     height: 70vh;
@@ -59,6 +60,7 @@ export const MainHome = styled.div`
       -webkit-backdrop-filter: blur(10px);
       color: white;
       width: 100%;
+      padding:20px ;
       height: 50px;
       margin-bottom:20px ;
       font-size: 1rem;
